@@ -1,0 +1,36 @@
+
+<div class="header">
+	评论
+</div>
+<div class="ui divider"></div>
+<div id="commentList">
+    {% for comment in comments %}
+	<div class="comment" id="comment{{ comment.id }}" author="{{ comment.comment_author.username }}">
+	  <a class="avatar" href="{% url 'account:user' comment.comment_author.id %}" >
+	  	<img src=" {{comment.comment_author.user_avatar}}" alt="" />
+	  </a>
+	  <div class="content">
+          {% if comment.parent %}
+            <a class="author" href="{% url 'account:user' comment.comment_author.id %}" >{{comment.comment_author.username }}</a> 回复 <a class="author" href="{% url 'account:user' comment.parent_author.id %}">{{comment.parent_author.username }}</a>
+          {% else %}
+	    	<a class="author" href="{% url 'account:user' comment.comment_author.id %}" >{{comment.comment_author.username }}</a>
+          {% endif %}
+	    <div class="metadata">
+	      <span class="date">{{ comment.time }}</span>
+	    </div>
+	    <div class="text commentContent">
+	      <p>{{ comment.content }}</p>
+	    </div>
+      {% if request.user.is_authenticated %}
+			    <div class="actions" >
+			      <a class="reply" ref="{{ comment.id }}">回复</a>
+			    </div>
+	    {% else %}
+		    <div class="actions" >
+		      <a class="reply" ref="{{comment.id }}">Reply</a>
+		    </div>
+	    {% endif %}
+	  </div>
+	</div>
+{% endfor %}
+</div>

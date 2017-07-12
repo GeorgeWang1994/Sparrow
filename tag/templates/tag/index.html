@@ -1,0 +1,73 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    {% if request.user.is_authenticated %}
+	<meta name="isLogin" content="true"/>
+    {% else %}
+	<meta name="isLogin" content="false"/>
+    {% endif %}
+  	<title>{{ tag.name }}</title>
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap2.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/navbar.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/semantic.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+  	<script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
+  	<script type="text/javascript" src="{% static 'js/jquery.infinitescroll.js' %}"></script>
+  	<script type="text/javascript" src="{% static 'js/semantic.js' %}"></script>
+  	<script type="text/javascript" src="{% static 'js/basic.js' %}"></script>
+  	<script type="text/javascript" src="{% static 'js/code.js' %}"></script>
+  	<script type="text/javascript" src="{% static 'js/interest.js' %}"></script>
+  	<script type="text/javascript" src="{% static 'js/login.js' %}"></script>
+  	<script type="text/javascript" src="{% static 'js/feed.js' %}"></script>
+  	<script type="text/javascript" src="{% static 'js/like.js' %}"></script>
+</head>
+<body>
+    {% include 'include/topbar.html' %}
+    {% include 'include/login_modal.html' %}
+	<div class="container">
+    <div class="row">
+          <div class="span8">
+                  <div class="ui feed" id="feeds">
+                    {% include "feeds.html" %}
+                  </div>  <!--end feed -->
+            </div> <!-- end span8  -->
+          <div class="span4">
+          	<div id="rightside">
+				<div class="tagheader">
+				  	<div class="content">
+				  		{{ tag.name }}
+				  	</div>
+                    {% if isInterest %}
+				  	    <div class="ui mini basic button interest" tag_id="{{ tag.id }}">
+				  			 已关注
+				  		</div>
+                    {% else %}
+				  	    <div class="ui mini yellow button interest" tag_id="{{ tag.id }}">
+				  			+关注
+				  		</div>
+                    {% endif %}
+				</div>
+                <div class="ui header">推荐用户</div>
+                <div class="ui vertical menu popusers">
+                  <div class="item">
+                      {% for user in recommend_users %}
+                        <a href="{% url 'account:user' user.id %}" class="popuser">
+                            <img class="ui inline image" src="{{ user.user_avatar }}">
+                        </a>
+                      {% endfor%}
+                    <!-- end popup -->
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

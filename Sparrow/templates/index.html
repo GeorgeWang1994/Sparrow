@@ -1,0 +1,122 @@
+{% load staticfiles %}
+<html lang = "en" >
+<head>
+    <meta charset = "UTF-8">
+    <title > Sparrow </title>
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico ' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap2.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/navbar.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/semantic.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <script src="{% static 'js/jquery.js'%}"></script>
+    <script src="{% static 'js/jquery.infinitescroll.js'%}"></script>
+    <script src="{% static 'js/semantic.js'%}"></script>
+    <script src="{% static 'js/basic.js'%}"></script>
+    <script src="{% static 'js/code.js'%}"></script>
+    <script src="{% static 'js/like.js'%}"></script>
+    <script src="{% static 'js/spost.js' %}"></script>
+</head>
+<body>
+{% include "include/topbar.html" %}
+  <div class="container">
+    <div class="row">
+          <div class="span8">
+	          	<div class="header_box">
+	          		<div class="ui avatar image">
+	                	<img src="{{ request.user.get_profile.get_mugshot_url }}">
+	                </div>
+					<div id="action_bar">
+						<div class="ui labeled icon menu actions" >
+						  <a class="item sport_link" href="#">
+						    <i class="blue big font icon"></i>
+						    发状态
+						  </a>
+						  <a class="item album_link" href="{% url 'album:upload' %}">
+						    <i class="pink big photo icon"></i>
+						    传图片
+						  </a>
+						  <a class="item post_link" href="{% url 'post:newpost' %}">
+						    <i class="big write icon"></i>
+						    写日志
+						  </a>
+						  <a class="item link">
+						    <i class="green big linkify icon"></i>
+						    链接
+						  </a>
+						</div>
+					  <div class="short_post">
+					  	<textarea placeholder="说点什么..." id="spost_content"></textarea>
+					  	<div class="bar">
+					  		<div class="ui tiny blue button" id="spost_send">
+					  			发表
+					  		</div>
+					  		<div class="ui tiny basic button" id="sport_cancel">
+					  			取消
+					  		</div>
+					  	</div>
+					  </div>
+					</div>
+	               </div>
+	               <!-- end header_box -->
+                  <div class="ui feed" id="feeds">
+                   <div class="event empty row">
+                      <div class="label span2">
+                        <img src="">
+                      </div>
+                      <div class="content span6">
+                        <div class="summary">
+                          <a href=""></a> 说
+                          <div class="date">
+                            刚刚
+                          </div>
+                        </div>
+                        <div class="extra">
+                        </div>
+                        <div class="meta">
+                          <div class="actions">
+							  <a class="comment">
+	                            <i class="comment outline icon"></i><span>0</span>
+	                          </a>
+	                          <a class="like">
+	                          	<i class="heart icon" object_type="4" object_id=""></i><span>0</span>
+	                          </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- empty event , wait for full and show -->
+                      {% include "feeds.html" %}
+                  </div>  <!--end feed -->
+                    <div class="pagination" style="float: right;">
+                        <span class="step-links">
+                            {% if feeds.has_previous %}
+                                <a href="?page={{ feeds.previous_page_number }}">上一页</a>
+                            {% endif %}
+
+                            <span class="current">
+                               {{ feeds.number }}
+                            </span>
+
+                            {% if feeds.has_next %}
+                                <a href="?page={{ feeds.next_page_number }}">下一页</a>
+                            {% endif %}
+                        </span>
+                    </div>
+            </div>
+          <div class="span4">
+          	<div id="rightside">
+                {% include "include/usercard.html" %}
+				{% include "include/sidebar.html" %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <script src="{% static 'js/feed.js' %}"></script>
+    <script type="text/javascript">
+        $(function() {
+            $('#index ').addClass('active');
+        });
+    </script>
+</body>
+</html>'

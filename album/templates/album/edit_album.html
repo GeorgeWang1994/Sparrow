@@ -1,0 +1,105 @@
+{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="id" content="{{ album.id }}">
+	<title>相册</title>
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap2.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/navbar.css' %}">
+ 	<link rel="stylesheet" type="text/css" href="{% static 'css/semantic.css' %}">
+  	<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+	<script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
+{#    <script type="text/javascript" src="{% static 'js/csrf.js' %}"></script>#}
+	<script type="text/javascript" src="{% static 'js/ajaxfileupload.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/basic.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/code.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/tag.js' %}"></script> {# 注意tag放在前面用来处理tag #}
+	<script type="text/javascript" src="{% static 'js/editalbum.js' %}"></script>
+	
+	<style>
+	.uploader-button input {
+		width: 70px;
+		height:20px;
+		opacity: 0;
+		
+	}
+	.uploader-button.ui.button{
+		background: url("{% static 'img/uploader_button.png' %}") no-repeat;
+	}
+	#uploadedphotos textarea {
+		border: 0;
+		resize: none;
+		width: 100%;
+	}
+	</style>
+</head>
+<body>
+	{% include "include/topbar.html" %}
+	<div class="container">
+		<div class="row">
+			<div class="span8">
+				<div class="ui three cards" id="uploadedphotos">
+                    {% with photos=album.photos.all %}
+                    {% for photo in photos %}
+					  <div class="card" id="card{{ photo.id }} ">
+					    <img src="{{ photo.url }}" style="width:auto;height:200px"/>
+					    <div class="content">
+					    	<textarea rows="" cols="" placeholder="添加描述...">{{ photo.desc }}</textarea>
+					    </div>
+					    <div class="extra meta">
+							<a href="#" ><i class="delete icon"></i>删除</a>
+					    </div>
+					  </div>
+
+                    {% endfor %}
+                    {% endwith %}
+				
+				</div>	<!-- end cards -->		<!-- end uploadedphotos -->		
+				<div id="uploadarea">
+					<span class="uploader-button ui button">
+						<input type="file" id="uploader_input" name="uploader_input"/>
+					</span>
+					<span>
+						选择照片上传,支持jpeg,png,5M
+					</span>										
+				</div> <!-- end uploadarea -->
+			</div>	<!-- end span8 -->
+			<div class="span4">
+					<div class="ui form">
+						<div class="field">
+						  	<label>标签:</label>
+						  	<div class="tags">
+					  		<input type="text" class="tag-input" id="tag-input" placeholder="空格添加标签">
+						    <div class="tagfield">
+                                {% for tag in album.tags.all %}
+                                    <div class="ui label">
+                                        {{ tag.name }}
+                                        <i class="delete icon"></i>
+                                    </div>
+                                {% endfor %}
+						    </div>
+					  	</div>
+						</div>
+
+                        <div class="field">
+							<label>标题:</label>
+							<textarea rows="" cols="" id="album_title">{{ album.title }}</textarea>
+						</div>
+					
+						<div class="field">
+							<label>描述:</label>
+							<textarea rows="" cols="" id="album_desc">{{ album.content }}</textarea>
+						</div>
+						
+					</div>
+					<div class="ui tiny blue button" id="saveAlbumBtn">
+						保存
+					</div>
+
+			</div> <!-- end span4 -->
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,35 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>404</title>
+  <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap2.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/navbar.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/semantic.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+  <style>
+  body{
+  	background-color: white;
+  }
+  
+  </style>
+</head>
+<body>
+    {%include "include/topbar.html" %}
+	<div class="container">
+		<div class="row">
+			<div class="span9 offset1">
+				<div class="error page img">
+					<img src="{% static 'img/404.jpg' %}" alt="" />
+				</div>
+				<div class="error page code">
+					404
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

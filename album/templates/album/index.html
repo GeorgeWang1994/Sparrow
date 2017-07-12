@@ -1,0 +1,201 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="type" content="album">
+	<meta name="id" content="{{ album.id }}">
+	{% if request.user.is_authenticated %}
+		<meta name="isLogin" content="true"/>
+	{% else %}
+		<meta name="isLogin" content="false"/>
+	{% endif %}
+	<title></title>
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap2.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/navbar.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/semantic.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+	<script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/semantic.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/basic.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/code.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/comment.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/follow.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/login.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/like.js' %}"></script>
+</head>
+<body>
+	{% include "include/topbar.html" %}
+    {% include "include/login_modal.html" %}
+	<div class="container">
+		<div class="row">
+			<div class="span8">
+				<div id="imgcontainer">
+					<img src="" alt="" id="mainimg" class="ui centered image"/>
+				</div>
+			</div>
+			<div class="span4">
+				<div id="rightside">
+					<div class="album metas">
+						<div class="meta author">
+                        {% with user=album.author %}
+							<a href="/user/{{ album.id }}"><img class="ui avatar image" src="{{ user.user_avatar }}"></a>
+							<span>{{ user.username }}</span>
+							{% if request.user.is_authenticated %}
+                                {% ifnotequal request.user.id user.id %}
+                                    {% if follow %}
+                                        <span class="ui tiny basic button follow" following="{{ user.id }}">已关注</span>
+                                    {% else %}
+                                        <span class="ui inverted tiny yellow button follow" following="{{user.id }}">+关注</span>
+                                    {% endif %}
+								{% endifnotequal %}
+							{% else %}
+								<span class="ui inverted tiny yellow button follow" following="{{user.id }}">+关注</span>
+							{% endif %}
+                        {% endwith %}
+						</div>
+
+						<div class="ui tiny images meta" id="imgbox">
+                            {% for photo in album.photos.all %}
+								<a href="#"><img src="{{ photo.url }}" alt="" id="{{photo.id }}"></a>
+							{% endfor %}
+						</div>
+
+						<div class="meta tags">
+                            {% for tag in album.tags.all %}
+                        		<a class="ui label" href="/tag/{{tag.id }}">{{tag.name }}</a>
+                        	{% endfor %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+        <div>
+            <div class="action">
+                <div class="ui circular icon basic button">
+                  <i class="share alternate icon"></i>
+                </div>
+                <div class="ui circular orange icon button">
+                  <i class="weibo icon" id="weiboshare"></i>
+                </div>
+                <div class="ui circular blue icon button">
+                  <i class="qq icon" id="qqshare"></i>
+                </div>
+                <div class="ui circular green icon button">
+                  <i class="wechat icon" id="wechatshare"></i>
+                </div>
+
+                <div class="ui circular icon basic button post like">
+                    {% if is_like %}
+                    <i class="red heart icon" id="like"></i>
+                    {% else %}
+                    <i class="empty red heart icon" id="like"></i>
+                   {% endif %}
+                </div>
+
+                {% ifequal request.user.id album.author.id %}
+                    {%include "include/trash_tip.html"%}
+
+                    <div class="ui circular icon basic button post pencil">
+                        <i class="pencil outline icon" id="pencil"></i>
+                    </div>
+                {% endifequal %}
+            </div>
+        </div>
+	</div>
+
+	<div class="comments">
+		<div class="container">
+			<div class="row">
+				<div class="span8">
+					<div class="ui comments" id="comments">
+					  <div id="replyarea">
+							  <form class="ui reply form" id="replyform">
+							    <div class="field">
+							      <textarea id="replycontent"></textarea>
+							    </div>
+								<div class="ui tiny blue button" id="replybtn">
+								  评论
+								</div>
+							  </form>
+					  </div>
+
+                            {% include 'comment/index.html' %}
+
+					  <!-- comment list -->
+					</div>
+					<!-- end comment -->
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+	$(document).ready(function(){
+		$('#mainimg').attr('src', $('#imgbox img:first').attr('src').split('?')[0]);
+		
+		$('#imgbox img').click(function() {
+			var src = $(this).attr('src').split('?')[0];
+			$('#mainimg').attr('src', src);
+		});
+
+		$('#pencil').click(function() {
+		    var id = $('meta[name=id]').attr('content');
+		    self.location = basePath + '/album/edit/'+id;
+        });
+
+        $('#like').click(function() {
+            var isLogin = $('meta[name=isLogin]').attr('content');
+            if(isLogin == 'false'){
+                $('.ui.small.modal.login-tip').modal('show');
+                return false;
+            }
+
+            var object_type = $('meta[name=type]').attr('content');
+            var object_id = $('meta[name=id]').attr('content');
+            var author = $('meta[name=author]').attr('content');
+            var url = basePath+"/like";
+
+            if(object_type == 'post') {
+                object_type = 1;
+            }
+            else if(object_type == 'album') {
+                object_type = 2;
+            } else {
+                return;
+            }
+
+            if($(this).hasClass('empty')){
+                url += '/do/';
+                $(this).removeClass().addClass('red heart icon');
+            }
+            else {
+                url += '/undo/';
+                $(this).removeClass().addClass('empty red heart icon');
+            }
+            $.ajax({
+                url: url,
+                type: 'POST',
+                dataType: 'json',
+                data:{
+                    author:author,
+                    object_type: object_type,
+                    object_id: object_id
+                }
+            })
+            .success(function(data){
+                if(SUCCESS_POST_LIKE == data.status) {
+                    $(this).addClass('red');
+                }
+                else if(SUCCESS_POST_UNLIKE == data.status) {
+                    $(this).removeClass('red');
+                }
+                else {
+                    return
+                }
+            })
+        });
+	});
+	</script>
+</body>
+</html>

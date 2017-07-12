@@ -1,0 +1,54 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>登录</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap2.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap2.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/navbar.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/semantic.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+	
+	<script src="{% static 'js/jquery.js' %}"></script>
+	<script src="{% static 'js/basic.js' %}"></script>
+	<script src="{% static 'js/code.js' %}"></script>
+	<script src="{% static 'js/login.js' %}"></script>
+</head>
+<body>
+{% include "include/topbar.html" %}
+	<div class="container">
+		<div class="row">
+			<div class="span8 offset2">	
+					<div class="ui header">登录</div>
+					<div class="ui divider"></div>			
+					<div class="row">
+						<div class="loginarea span4 offset2">
+							<div class="ui form">
+							  <div class="field">
+							    <label>邮箱<span id="emailTip" class="tip"></span></label>
+							    <input type="text" name="email" id="email"/>
+							  </div>
+							  <div class="field">
+							    <label>密码<span id="paswordTip" class="tip"></span></label>
+							    <input type="password" name="password" id="password"/>
+{#                                <input type="hidden" name="source_url" id="source_url" value="{{ request.META.HTTP_REFERER }}"/>#}
+							  </div>
+							  <div class="field">
+							  	<div class="ui green button" id="loginbtn">登录</div>
+							  </div>								
+							</div>
+							<div class="ui section divider"></div>
+							<div class="social">
+								<a class="ui orange basic button span4" href="{% url 'account:signup' %}">
+									邮箱注册
+								</a>
+							</div>	
+						</div>
+					</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

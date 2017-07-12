@@ -1,0 +1,113 @@
+{% for feed in feeds %}
+    <!-- new post -->
+    {% ifequal feed.object_type 1 %}
+ <div class="event row" type="post" object_type="{{feed.object_type }}" object_id="{{feed.object_id }}">
+   <div class="label span2">
+     <a href="{% url 'account:user' feed.author.id %}"><img src="{{feed.author.user_avatar }}"></a>
+       <a href="{% url 'account:user' feed.author.id %}"><p>{{ feed.author.username }}</p></a>
+   </div>
+   <div class="content span6">
+     <div class="summary">
+       <a href="{% url 'post:getPost' feed.object_id %}">{{feed.title }}</a>
+       <div class="date">
+         {{ feed.event_post.time }}
+       </div>
+     </div>
+     <div class="extra">
+         {% if feed.cover %}
+             <a href="{% url 'post:getPost' feed.object_id %}"><img src="{{ feed.cover }}" /></a>
+         {% endif %}
+   	</div>
+     <div class="extra">
+       
+       {{feed.summary }}
+
+     </div>
+     <div class="meta">
+         {% if feed.tags %}
+	       <div class="tags">
+		     	<i class="tag icon"></i>
+               {% for tag in feed.tags.all %}
+		     		<a href="/tag/{{tag.id }}">{{tag.name }}</a>
+		     	{% endfor %}
+		   </div>
+	   {% endif %}
+       <div class="actions">
+	 		<a class="comment">
+	            <i class="comment outline icon"></i> {{feed.comment_count }}
+	        </a>                           
+	        <a class="like">
+                {% if feed.is_like %}
+	        		<i class="red heart icon" author="{{feed.user_id }}" object_type={{feed.object_type }} object_id={{feed.object_id }}></i>
+	        		<span>{{feed.like_count }}</span>
+	        	{% else %}
+	        		<i class="heart icon" author="{{feed.user_id }}" object_type={{feed.object_type }} object_id={{feed.object_id }}></i>
+	        		<span>{{feed.like_count }}</span>
+	        	{% endif %}
+	        </a>
+       </div>
+
+     </div>  
+     <!-- end meta --> 
+     <div class="comments-attach"></div>
+     <!-- end comments-attach -->                                            
+   </div>
+   <!-- end content -->
+
+ </div>                    	
+ {% endifequal %}
+ 
+ <!-- new album -->
+    {% ifequal feed.object_type 2 %}
+
+ <div class="event row" type="album" object_type="{{feed.object_type }}" object_id="{{feed.object_id }}">
+   <div class="label span2">
+     <a href="{% url 'account:user' feed.author.id %}"><img src="{{feed.author.user_avatar }}"></a>
+       <a href="{% url 'account:user' feed.author.id %}"><p>{{ feed.author.username }}</p></a>
+   </div>
+   <div class="content span6">
+     <div class="summary">
+       <a href="{% url 'album:detail' feed.object_id %}"> {{ feed.title }}</a>
+    <div class="date">
+      {{feed.time }}
+    </div>                          
+     </div>
+     <div class="extra images">
+         {% for photo in feed.photos.all %}
+             <a href="#"><img src="{{ photo.url }}" alt="" id="preview_photo_{{ photo.id }}"></a>
+         {% endfor %}
+     </div>a
+     <div class="extra">{{ feed.event_album.desc }}</div>
+     <div class="meta">
+     {% if feed.tags  %}
+        <div class="tags">
+	      	<i class="tag icon"></i>
+         {% for tag in feed.tags.all %}
+	      		<a href="/tag/{{tag.id }}">{{tag.name }}</a>
+	      	{% endfor %}
+		</div> 
+		{% endif %}
+        <div class="actions">
+			<a class="comment">
+                    <i class="comment outline icon"></i> {{feed.comment_count }}
+        	</a>                           
+	        <a class="like">
+                {% if feed.is_like  %}
+	        		<i class="red heart icon" author="{{feed.user_id }}" object_type={{feed.object_type }} object_id={{feed.object_id }}></i>
+	        		<span>{{feed.like_count }}</span>
+	        	{% else %}
+	        		<i class="heart icon" author="{{feed.user_id }}" object_type={{feed.object_type }} object_id={{feed.object_id }}></i>
+	        		<span>{{feed.like_count }}</span>
+	        	{% endif %}
+	        </a>
+       </div>
+       <!-- end actions -->
+     </div>
+     <!-- end meta -->
+     <div class="comments-attach"></div>
+     <!-- end comments-attach -->
+   </div>
+ </div>                    
+ {% endifequal %}
+ <!-- end album  -->
+{% endfor %}

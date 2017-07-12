@@ -1,0 +1,37 @@
+
+<div class="ui header">
+    热门用户
+</div>
+<div class="ui vertical menu popusers">
+  <div class="item">
+      {% for user in users %}
+		<a href="{% url 'account:user' user.id %}" class="popuser">
+			<img class="ui inline image" src="{{ user.user_avatar }}">
+		</a>
+{#		{ % include page="/popup_usercard/${popuser.id }" flush="true"></jsp:include>#}
+
+      {% endfor%}
+	<!-- end popup -->
+
+	
+  </div>
+</div>
+	
+<!-- end menu -->	
+
+<div class="ui header">
+    热门标签
+</div>
+<div class="ui vertical menu poptags">
+    {% for tag in tags %}
+	  <a href="{% url 'tag:getTag' tag.id %}" target="_blank" />
+		  <div class="tagitem" style="background: url({{ tag.cover }})">
+		  	<div class="mask"></div>
+		  	<div class="tag">
+                {{ tag.name }}
+		  	</div>
+		  </div>
+	  </a>
+  {% endfor %}
+</div>					
+  

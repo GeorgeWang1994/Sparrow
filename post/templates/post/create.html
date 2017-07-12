@@ -1,0 +1,82 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>写日志</title>
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap2.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/navbar.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/semantic.css' %}">
+ 	<link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}">
+  	<link rel="stylesheet" type="text/css" href="{% static 'css/froala_editor.min.css' %}">
+  	<link rel="stylesheet" type="text/css" href="{% static 'css/froala_style.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+</head>
+<body>
+{% include "include/topbar.html"%}
+	<div class="container">
+		<div class="row">
+			<div class="span8">
+				<div class="ui form">
+				  <div class="field">
+				    <label>标题</label>
+                      <input type="text" id="title">
+				  </div>
+				  <div class="field">
+				    <label>正文</label>
+                      <textarea id="content"></textarea>
+				    <!--   <textarea id="content" class="post"></textarea> -->
+				  </div>
+
+					<div class="field">
+					  	<label>标签:</label>
+					  	<div class="tags">
+					  		<input type="text" class="tag-input" id="tag-input" placeholder="空格添加标签">
+						    <div class="tagfield">
+						    </div>
+					  	</div>
+					</div>
+				  			  
+ 				  <div class="inline field">
+				    <label>隐私:</label>
+                      <input type="radio" name="visible_status" value="1" checked="checked"> 公开
+                      <input type="radio" name="visible_status" value="0"> 仅自己可见
+				  </div>
+				  <div class="inline field">
+				  	<label>评论:</label>
+                      <input type="radio" name="comment_status" value="1" checked="checked"> 允许评论
+                      <input type="radio" name="comment_status" value="0"> 不允许评论
+				  </div>
+				  <div class="ui button green" id="send">发表</div>
+				  <div class="ui button" id="cancel">取消</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="ui basic small modal cancel-tip">
+	    <div class="content">
+	      <p>确定取消编辑吗?</p>
+	    </div>
+	    <div class="actions">
+	      <div class="ui red basic cancel inverted button">
+	        <i class="remove icon"></i>
+	        否,留在本页
+	      </div>
+	      <div class="ui green ok inverted button">
+	        <i class="checkmark icon"></i>
+	        是
+	      </div>
+	    </div>
+	</div>
+	
+  	<script type="text/javascript" src="{% static 'js/jquery-1.11.1.min.js' %}"></script>
+  	<script type="text/javascript" src="{% static 'js/froala_editor.min.js' %}"></script>
+  	<script type="text/javascript" src="{% static 'js/semantic.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/basic.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/code.js' %}"></script>
+  	<script type="text/javascript" src="{% static 'js/tag.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/newarticle.js' %}"></script>
+
+</body>
+</html>

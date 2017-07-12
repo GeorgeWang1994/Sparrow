@@ -1,0 +1,146 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+	<meta charset="UTF-8">
+	<meta name="type" content="post">
+	<meta name="id" content="{{ post.id }}">
+	<meta name="author" content="{{ post.author.username }}">
+    {% if request.user.is_authenticated %}
+	<meta name="isLogin" content="true"/>
+    {% else %}
+	<meta name="isLogin" content="false"/>
+    {% endif %}
+
+	<title>{{ post.title }}</title>
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap2.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/navbar.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/semantic.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
+	<style>
+	.post img{
+		max-width: 620px;
+	}
+	</style>
+	
+  	<script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
+  	<script type="text/javascript" src="{% static 'js/semantic.js' %}"></script>
+  	<script type="text/javascript" src="{% static 'js/basic.js' %}"></script>
+  	<script type="text/javascript" src="{% static 'js/code.js' %}"></script>
+  	<script type="text/javascript" src="{% static 'js/comment.js' %}"></script>
+  	<script type="text/javascript" src="{% static 'js/post.js' %}"></script>
+  	<script type="text/javascript" src="{% static 'js/follow.js' %}"></script>
+  	<script type="text/javascript" src="{% static 'js/login.js' %}"></script>
+</head>
+<body>
+	{%include "include/topbar.html"%}
+    {%include "include/login_modal.html"%}
+	<div class="container">
+		<div class="row">
+			<div class="span8 offset2">
+						<div class="post" id="post{{ post.id }}">
+							<div class="header">
+								{{post.title }}
+							</div>
+							<div class="date">
+								<i class="wait icon"></i><span>{{ post.time }}</span>
+							</div>
+							<div class="meta">
+								<div class="author">
+									<a href="{% url 'account:user' post.author.id %}">
+										<img class="ui avatar image" src="{{ post.author.user_avatar }}">
+									</a>
+									<span>{{ post.author.username }}</span>
+									{% if request.user.is_authenticated %}
+                                        {% ifnotequal request.user.id  post.author.id %}
+                                            {% if follow %}
+                                                    <div class="mini ui basic button follow" following="{{ post.author.id }}">已关注</div>
+                                              {% else %}
+                                                    <div class="mini ui yellow button follow" following="{{ post.author.id}}">+关注</div>
+                                            {% endif %}
+                                        {% endifnotequal %}
+                                    {% else %}
+                                    <div class="mini ui yellow button follow" following="{{ post.author.id }}">+关注</div>
+                                    {% endif %}
+								</div>
+								<div class="tags">
+                                    {% for tag in post.tags.all %}
+										<a class="ui label" href="{% url 'tag:getTag' tag.id %}">{{tag.name }}</a>
+									{% endfor %}
+								</div>
+							</div>
+							<p>
+                                {{ post.content|safe }}
+							</p>
+						</div>
+						<div>
+							<div class="action">
+								<div class="ui circular icon basic button">						
+								  <i class="share alternate icon"></i>	
+								</div>							
+								<div class="ui circular orange icon button">
+								  <i class="weibo icon" id="weiboshare"></i>
+								</div>
+								<div class="ui circular blue icon button">
+								  <i class="qq icon" id="qqshare"></i>
+								</div>
+								<div class="ui circular green icon button">
+								  <i class="wechat icon" id="wechatshare"></i>
+								</div>
+
+								<div class="ui circular icon basic button post like">
+                                    {% if is_like %}
+                                    <i class="red heart icon" id="like"></i>
+                                    {% else %}
+								  	<i class="empty red heart icon" id="like"></i>
+								   {% endif %}
+								</div>
+
+                                {% ifequal request.user.id post.author.id %}
+                                    {%include "include/trash_tip.html"%}
+								    <div class="ui circular icon basic button post trash">
+									    <i class="trash outline icon" id="trash"></i>
+								    </div>
+
+                                    <div class="ui circular icon basic button post pencil">
+									    <i class="pencil outline icon" id="pencil"></i>
+								    </div>
+
+								{% endifequal %}
+							</div>
+						</div>
+					</div>
+		</div>
+	</div>
+	
+	<!--  -->
+	<div class="comments">
+		<div class="container">
+			<div class="row">
+				<div class="span8 offset2">
+					<div class="ui comments" id="comments">
+						  <div id="replyarea">
+							  <form class="ui reply form" id="replyform">
+							    <div class="field">
+                                    {% if request.user.is_authenticated %}
+							            <textarea id="replycontent"></textarea>
+                                    {% else %}
+                                        <textarea id="replycontent" placeholder="请先登录"></textarea>
+                                    {% endif %}
+							    </div>
+								<div class="ui tiny primary button" id="replybtn">
+								  评论
+								</div>
+							  </form>								
+						  </div>
+                        {% include 'comment/index.html' %}
+					  </div>
+					</div>
+				</div>
+			 </div>
+		</div>
+		<!-- end comment -->
+	</div>
+</body>
+</html>
